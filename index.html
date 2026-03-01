@@ -58,35 +58,40 @@
             overflow-x: hidden;
         }
 
-        /* CRT Scanlines Effect */
-        body::before {
-            content: '';
+        /* CRT Scanlines Effect - fixed overlay */
+        .crt-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
             background: repeating-linear-gradient(
                 0deg,
-                transparent,
+                transparent 0px,
                 transparent 2px,
                 var(--scanline) 2px,
                 var(--scanline) 4px
             );
-            pointer-events: none;
-            z-index: 9999;
+        }
+
+        /* CRT Flicker */
+        .crt-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
             animation: flicker 0.15s infinite;
         }
 
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.98; }
-        }
-
-        /* Subtle CRT curvature effect on edges */
-        body::after {
+        /* CRT Vignette */
+        .crt-overlay::after {
             content: '';
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -97,8 +102,6 @@
                 transparent 60%,
                 rgba(0, 0, 0, 0.15) 100%
             );
-            pointer-events: none;
-            z-index: 9998;
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -475,6 +478,7 @@
     </style>
 </head>
 <body>
+    <div class="crt-overlay"></div>
     <header>
         <div class="container">
             <div class="logo"><span>~/</span>dev</div>
